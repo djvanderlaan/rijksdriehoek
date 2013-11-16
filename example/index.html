@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="../js/rijksdriehoek.js"></script>
+    <style>
+      BODY {
+        font-family : Ubuntu, sans;
+        font-size: 10px;
+      }
+      P {
+        width: 500px;
+        text-align: justify;
+      }
+      g.rijksdriehoek path {
+        fill: rgb(230, 230, 200);
+        stroke-width: 0.5px;
+        stroke: rgb(50, 50, 50);
+      }
+      g.transversemercator path {
+        fill: none;
+        stroke-width: 0.5px;
+        stroke: rgb(255, 0, 0);
+        stroke-opacity: 0.5;
+      }
+      g.mercator path {
+        fill: none;
+        stroke-width: 0.5px;
+        stroke: rgb(0, 0, 255);
+        stroke-opacity: 0.5;
+      }
+      g.transversemercator {
+        visibility: hidden;
+      }
+      g.mercator {
+        visibility: hidden;
+      }
+      rect.switchmerc, rect.switchtransmerc {
+        stroke: rgb(50, 50, 50);
+        fill: white;
+        stroke-width: 0.5pt;
+      }
+      text {
+        fill: rgb(50, 50, 50);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Dutch National Grid (Rijksdriehoek) Projection</h1>
+
+    <div id="vis">
+    </div>
+
+    <p>A example showing the <a href="https://github.com/djvanderlaan/rijksdriehoek">d3.geo.rijksdriehoek</a> 
+    projection for <a href="http://d3js.org/">d3.js</a>. It also possible to overly the map with maps 
+    projected using the Mercator or transverse Mercator (much more accurate for locations away from the 
+    equator). </p>
+   
+    <script>
+      var height = 600;
+      var width = 500;
+       
+      var vis = d3.select("#vis").append("svg")
+        .attr("width", width).attr("height", height)
+      vis.append("rect").attr("class", "background").attr("width", width)
+        .attr("height", height).style({"fill":"#FFFFFF"});
+
+      vis.append("text").attr("x", 0).attr("y", 15).attr("dy", "0.35em").text("Overlay with:");
+      vis.append("text").attr("x", 13).attr("y", 30).attr("dy", "0.35em").text("Mercator");
+      vis.append("rect").attr("class", "switchmerc").attr("y", 25).attr("width", 10)
+        .attr("height", 10).on("click", function(d) {
+          var g = d3.select(".mercator");
+          if (g.style("visibility") == "visible") {
+            d3.select(".mercator").style("visibility", "hidden");
+            d3.select(this).style("fill","#FFFFFF");
+          } else {
+            d3.selectAll(".mercator").style("visibility", "visible");
+            d3.select(this).style("fill","#0000FF");
+          }
+        });
+
+      vis.append("text").attr("x", 13).attr("y", 45).attr("dy", "0.35em").text("Transverse Mercator");
+      vis.append("rect").attr("class", "switchtransmerc").attr("y", 40).attr("width", 10)
+        .attr("height", 10).on("click", function(d) {
+          var g = d3.select(".transversemercator");
+          if (g.style("visibility") == "visible") {
+            d3.selectAll(".transversemercator").style("visibility", "hidden");
+            d3.select(this).style("fill","#FFFFFF");
+          } else {
+            d3.selectAll(".transversemercator").style("visibility", "visible");
+            d3.select(this).style("fill","#FF0000");
+          }
+        });
+
+
+      function draw_map(g, map, projection, width, height) {
+        var path = d3.geo.path().projection(projection);
+        // determine scale and translation so that we project the map inside 
+        // the window we have
+        var bounds = path.bounds(map);
+        var scale  = .95 / Math.max((bounds[1][0] - bounds[0][0]) / width,
+            (bounds[1][1] - bounds[0][1]) / height);
+        var transl = [(width - scale * (bounds[1][0] + bounds[0][0])) / 2,
+            (height - scale * (bounds[1][1] + bounds[0][1])) / 2];
+        projection.scale(scale).translate(transl);
+        // draw the map
+        g.selectAll("path").data(map.features).enter().append("path")
+          .attr("d", path);
+      }
+
+      d3.json("municipalities_2013.json", function(map) {
+        var g = vis.append("g").attr("class", "rijksdriehoek");
+        var projection = d3.geo.rijksdriehoek().scale(1).translate([0,0]);
+        draw_map(g, map, projection, width, height);
+
+        var g = vis.append("g").attr("class", "transversemercator");
+        var projection = d3.geo.transverseMercator()
+          .rotate([-5.38720621, -52.15517440]).scale(1).translate([0,0]);
+        draw_map(g, map, projection, width, height);
+
+        var g = vis.append("g").attr("class", "mercator");
+        var projection = d3.geo.mercator().scale(1).translate([0,0]);
+        draw_map(g, map, projection, width, height);
+      });
+    </script>
+  </body>
+</html>
+
