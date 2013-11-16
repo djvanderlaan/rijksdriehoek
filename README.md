@@ -8,7 +8,7 @@ Javascript
 
 The javascript file in the js directory defines a `d3.geo.rijksdriehoek` projection that can be 
 used as regular projections in d3 to project maps in WGS84 coordinates to Dutch National Grid
-coordinates. 
+coordinates. For an example see <a href="http://www.iostream.nl/pages/rijksdriehoek/">rijksdriehoek</a>.
 
 R
 -
