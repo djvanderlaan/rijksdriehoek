@@ -1,7 +1,10 @@
 rijksdriehoek
 =============
 
-Convert Dutch National Grid (Rijksdriehoek) coordinates from and to WGS84 coordinates
+Convert Dutch National Grid (Rijksdriehoek) coordinates from and to WGS84 coordinates. It uses the
+<a href="http://www.dekoepel.nl/pdf/Transformatieformules.pdf">approximation equations by F.H. 
+Sleutelkamp and G.L. Strang van Hees</a>.
+
 
 Javascript
 ----------
