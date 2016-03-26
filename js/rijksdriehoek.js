@@ -1,4 +1,3 @@
-'use strict';
 
 function rijksdriehoek(λ, φ) {
   // Coordinates of origin (Amersfoort)
