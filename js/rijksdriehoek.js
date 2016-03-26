@@ -26,8 +26,8 @@ function rijksdriehoek(λ, φ) {
     {"p":1, "q":1, "S": -0.032},
     {"p":0, "q":4, "S": 0.092},
     {"p":1, "q":4, "S": -0.054}]
-  dφ = 0.36*(180*φ/Math.PI - φ0);
-  dλ = 0.36*(180*λ/Math.PI - λ0);
+  var dφ = 0.36*(180*φ/Math.PI - φ0);
+  var dλ = 0.36*(180*λ/Math.PI - λ0);
   var x = x0;
   for (var i = 0; i < R.length; ++i) {
     var p = R[i].p;
