@@ -19,3 +19,10 @@ R
 The R file contains two functions to project from WGS84 to Dutch National Grid and vice versa. It
 furthermore defines a function that can change the projection of a geoJSON file.
 
+
+Python
+------
+
+Tests are included in the file (run `python rijksdriehoek.py`). Available functions are `rd_to_wgs(x,y)`
+and `wgs_to_rd(phi, lambda)`.
+
